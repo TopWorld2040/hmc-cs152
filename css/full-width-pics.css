@@ -4,9 +4,6 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
-body {
-}
-
 .image-bg-fluid-height,
 .image-bg-fixed-height {
     text-align: center;
@@ -31,12 +28,13 @@ body {
 }
 
 section {
-    padding: 75px 0;
+    padding: 15px 0;
+    padding-bottom: 0;
 }
 
 .section-heading {
     margin: 30px 0;
-    font-size: 4em;
+    font-size: 2em;
 }
 
 .section-lead {
