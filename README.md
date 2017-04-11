@@ -1,16 +1,38 @@
-# hmc-cs152
+hmc-cs152
+=========
+
 Final Project for CS 152 (Neural Network)
 
-Now, the crontab is working. The project page is http://cs.hmc.edu/~mjenrungrot/hmc-cs152. The page will be updated, e.g. pulling from this Github folder every minute. 
+Now, the crontab is working. The project page is
+http://cs.hmc.edu/\~mjenrungrot/hmc-cs152. The page will be updated, e.g.
+pulling from this Github folder every minute.
 
-## Useful links
+Useful links
+------------
 
-__Deepdream__
-- https://github.com/google/deepdream
-- https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html
+**Deepdream** - https://github.com/google/deepdream -
+https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html
 - https://en.wikipedia.org/wiki/DeepDream
 
+ 
 
-# Dependencies
-- Keras
-- Tensorflow
+Deep Style Learning
+
+ 
+
+ 
+
+Demystifying Neural Style Transfer
+
+<https://arxiv.org/pdf/1701.01036.pdf>
+
+ 
+
+ 
+
+Dependencies
+============
+
+-   Keras
+
+-   Tensorflow
