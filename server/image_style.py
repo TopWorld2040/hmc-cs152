@@ -58,11 +58,10 @@ import time
 import argparse
 
 import tensorflow as tf
-from keras.applications import vgg16
-from keras import backend as K
+from keras.applications import vgg19
+import keras.backend.tensorflow_backend as K
 
-K.set_device('cpu')
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.24)
+verbose = True
 
 parser = argparse.ArgumentParser(description='Neural style transfer with Keras.')
 parser.add_argument('base_image_path', metavar='base', type=str,
@@ -80,20 +79,31 @@ parser.add_argument('--style_weight', type=float, default=1.0, required=False,
 parser.add_argument('--tv_weight', type=float, default=1.0, required=False,
                     help='Total Variation weight.')
 
+
 args = parser.parse_args()
 base_image_path = args.base_image_path
 style_reference_image_path = args.style_reference_image_path
 result_prefix = args.result_prefix
 iterations = args.iter
 
+#base_image_path = "Tuebinger_Neckarfront.jpg"
+#style_path = ["everfilter/{}.jpg".format(i) for i in range(1,16)]
+#result_prefix = "15style"
+#iterations = 100
+
 # these are the weights of the different loss components
 total_variation_weight = args.tv_weight
 style_weight = args.style_weight
 content_weight = args.content_weight
 
+if(verbose):
+    print("variation weight: {}".format(total_variation_weight))
+    print("style weight: {}".format(style_weight))
+    print("content weight: {}".format(content_weight))
+    
 # dimensions of the generated picture.
 width, height = load_img(base_image_path).size
-img_nrows = 400
+img_nrows = height
 img_ncols = int(width * img_nrows / height)
 
 # util function to open, resize and format pictures into appropriate tensors
@@ -103,7 +113,7 @@ def preprocess_image(image_path):
     img = load_img(image_path, target_size=(img_nrows, img_ncols))
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
-    img = vgg16.preprocess_input(img)
+    img = vgg19.preprocess_input(img)
     return img
 
 # util function to convert a tensor into a valid image
@@ -128,6 +138,9 @@ def deprocess_image(x):
 base_image = K.variable(preprocess_image(base_image_path))
 style_reference_image = K.variable(preprocess_image(style_reference_image_path))
 
+if(verbose):
+    print("K.image_data_format is {}".format(K.image_data_format()))
+
 # this will contain our generated image
 if K.image_data_format() == 'channels_first':
     combination_image = K.placeholder((1, 3, img_nrows, img_ncols))
@@ -139,9 +152,9 @@ input_tensor = K.concatenate([base_image,
                               style_reference_image,
                               combination_image], axis=0)
 
-# build the VGG16 network with our 3 images as input
+# build the VGG19 network with our 3 images as input
 # the model will be loaded with pre-trained ImageNet weights
-model = vgg16.VGG16(input_tensor=input_tensor,
+model = vgg19.VGG19(input_tensor=input_tensor,
                     weights='imagenet', include_top=False)
 print('Model loaded.')
 
@@ -218,6 +231,7 @@ for layer_name in feature_layers:
     combination_features = layer_features[2, :, :, :]
     sl = style_loss(style_reference_features, combination_features)
     loss += (style_weight / len(feature_layers)) * sl
+
 loss += total_variation_weight * total_variation_loss(combination_image)
 
 # get the gradients of the generated image wrt the loss

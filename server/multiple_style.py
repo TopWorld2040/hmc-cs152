@@ -58,38 +58,50 @@ import time
 import argparse
 
 import tensorflow as tf
-from keras.applications import vgg16
+from keras.applications import vgg19
 import keras.backend.tensorflow_backend as K
 
 # K.set_device('gpu')
 # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.24)
 
-parser = argparse.ArgumentParser(description='Neural style transfer with Keras.')
-parser.add_argument('base_image_path', metavar='base', type=str,
-                    help='Path to the image to transform.')
-parser.add_argument('style_reference_image_path', metavar='ref', type=str,
-                    help='Path to the style reference image.')
-parser.add_argument('result_prefix', metavar='res_prefix', type=str,
-                    help='Prefix for the saved results.')
-parser.add_argument('--iter', type=int, default=10, required=False,
-                    help='Number of iterations to run.')
-parser.add_argument('--content_weight', type=float, default=0.025, required=False,
-                    help='Content weight.')
-parser.add_argument('--style_weight', type=float, default=1.0, required=False,
-                    help='Style weight.')
-parser.add_argument('--tv_weight', type=float, default=1.0, required=False,
-                    help='Total Variation weight.')
+# parser = argparse.ArgumentParser(description='Neural style transfer with Keras.')
+# parser.add_argument('base_image_path', metavar='base', type=str,
+#                     help='Path to the image to transform.')
+# parser.add_argument('style_reference_image_path', metavar='ref', type=str,
+#                     help='Path to the style reference image.')
+# parser.add_argument('result_prefix', metavar='res_prefix', type=str,
+#                     help='Prefix for the saved results.')
+# parser.add_argument('--iter', type=int, default=10, required=False,
+#                     help='Number of iterations to run.')
+# parser.add_argument('--content_weight', type=float, default=0.025, required=False,
+#                     help='Content weight.')
+# parser.add_argument('--style_weight', type=float, default=1.0, required=False,
+#                     help='Style weight.')
+# parser.add_argument('--tv_weight', type=float, default=1.0, required=False,
+#                     help='Total Variation weight.')
 
-args = parser.parse_args()
-base_image_path = args.base_image_path
-style_reference_image_path = args.style_reference_image_path
-result_prefix = args.result_prefix
-iterations = args.iter
+#args = parser.parse_args()
+#gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.50)
+
+
+base_image_path = "Tuebingen_Neckarfront.jpg"
+style_reference_image_path1 = "everfilter/1.jpg"
+style_reference_image_path2 = "everfilter/2.jpg"
+style_reference_image_path3 = "everfilter/3.jpg"
+style_reference_image_path4 = "everfilter/4.jpg"
+style_reference_image_path5 = "everfilter/5.jpg"
+style_reference_image_path6 = "everfilter/6.jpg"
+style_reference_image_path7 = "everfilter/7.jpg"
+style_reference_image_path8 = "everfilter/8.jpg"
+style_reference_image_path9 = "everfilter/9.jpg"
+style_reference_image_path10 = "everfilter/10.jpg"
+result_prefix = "multiple_style"
+iterations = 10000
 
 # these are the weights of the different loss components
-total_variation_weight = args.tv_weight
-style_weight = args.style_weight
-content_weight = args.content_weight
+total_variation_weight = 1
+style_weight = 1
+content_weight = 0
 
 # dimensions of the generated picture.
 width, height = load_img(base_image_path).size
@@ -103,11 +115,10 @@ def preprocess_image(image_path):
     img = load_img(image_path, target_size=(img_nrows, img_ncols))
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
-    img = vgg16.preprocess_input(img)
+    img = vgg19.preprocess_input(img)
     return img
 
 # util function to convert a tensor into a valid image
-
 
 def deprocess_image(x):
     if K.image_data_format() == 'channels_first':
@@ -126,7 +137,16 @@ def deprocess_image(x):
 
 # get tensor representations of our images
 base_image = K.variable(preprocess_image(base_image_path))
-style_reference_image = K.variable(preprocess_image(style_reference_image_path))
+style_reference_image1 = K.variable(preprocess_image(style_reference_image_path1))
+style_reference_image2 = K.variable(preprocess_image(style_reference_image_path2))
+style_reference_image3 = K.variable(preprocess_image(style_reference_image_path3))
+style_reference_image4 = K.variable(preprocess_image(style_reference_image_path4))
+#style_reference_image5 = K.variable(preprocess_image(style_reference_image_path5))
+#style_reference_image6 = K.variable(preprocess_image(style_reference_image_path6))
+#style_reference_image7 = K.variable(preprocess_image(style_reference_image_path7))
+#style_reference_image8 = K.variable(preprocess_image(style_reference_image_path8))
+#style_reference_image9 = K.variable(preprocess_image(style_reference_image_path9))
+#style_reference_image10= K.variable(preprocess_image(style_reference_image_path10))
 
 # this will contain our generated image
 if K.image_data_format() == 'channels_first':
@@ -134,14 +154,23 @@ if K.image_data_format() == 'channels_first':
 else:
     combination_image = K.placeholder((1, img_nrows, img_ncols, 3))
 
-# combine the 3 images into a single Keras tensor
+# combine the 10 images into a single Keras tensor
 input_tensor = K.concatenate([base_image,
-                              style_reference_image,
-                              combination_image], axis=0)
+                             style_reference_image1,
+                             style_reference_image2,
+                             style_reference_image3,
+                             style_reference_image4,
+                             #style_reference_image5,
+                             #style_reference_image6,
+                             #style_reference_image7,
+                             #style_reference_image8,
+                             #style_reference_image9,
+                             #style_reference_image10,
+                             combination_image], axis=0)
 
-# build the VGG16 network with our 3 images as input
+# build the VGG19 network with our 3 images as input
 # the model will be loaded with pre-trained ImageNet weights
-model = vgg16.VGG16(input_tensor=input_tensor,
+model = vgg19.VGG19(input_tensor=input_tensor,
                     weights='imagenet', include_top=False)
 print('Model loaded.')
 
@@ -205,19 +234,20 @@ def total_variation_loss(x):
 loss = K.variable(0.)
 layer_features = outputs_dict['block4_conv2']
 base_image_features = layer_features[0, :, :, :]
-combination_features = layer_features[2, :, :, :]
+combination_features = layer_features[5, :, :, :]
 loss += content_weight * content_loss(base_image_features,
                                       combination_features)
 
 feature_layers = ['block1_conv1', 'block2_conv1',
                   'block3_conv1', 'block4_conv1',
                   'block5_conv1']
-for layer_name in feature_layers:
-    layer_features = outputs_dict[layer_name]
-    style_reference_features = layer_features[1, :, :, :]
-    combination_features = layer_features[2, :, :, :]
-    sl = style_loss(style_reference_features, combination_features)
-    loss += (style_weight / len(feature_layers)) * sl
+for idx in range(1,5):
+    for layer_name in feature_layers:
+        layer_features = outputs_dict[layer_name]
+        style_reference_features = layer_features[idx, :, :, :]
+        combination_features = layer_features[5, :, :, :]
+        sl = style_loss(style_reference_features, combination_features)
+        loss += (style_weight / len(feature_layers)) * sl
 loss += total_variation_weight * total_variation_loss(combination_image)
 
 # get the gradients of the generated image wrt the loss
