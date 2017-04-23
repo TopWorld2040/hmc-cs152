@@ -61,27 +61,8 @@ import tensorflow as tf
 from keras.applications import vgg19
 import keras.backend.tensorflow_backend as K
 
-# K.set_device('gpu')
-# gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.24)
 
-# parser = argparse.ArgumentParser(description='Neural style transfer with Keras.')
-# parser.add_argument('base_image_path', metavar='base', type=str,
-#                     help='Path to the image to transform.')
-# parser.add_argument('style_reference_image_path', metavar='ref', type=str,
-#                     help='Path to the style reference image.')
-# parser.add_argument('result_prefix', metavar='res_prefix', type=str,
-#                     help='Prefix for the saved results.')
-# parser.add_argument('--iter', type=int, default=10, required=False,
-#                     help='Number of iterations to run.')
-# parser.add_argument('--content_weight', type=float, default=0.025, required=False,
-#                     help='Content weight.')
-# parser.add_argument('--style_weight', type=float, default=1.0, required=False,
-#                     help='Style weight.')
-# parser.add_argument('--tv_weight', type=float, default=1.0, required=False,
-#                     help='Total Variation weight.')
 
-#args = parser.parse_args()
-#gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.50)
 
 
 base_image_path = "Tuebingen_Neckarfront.jpg"
@@ -96,7 +77,7 @@ style_reference_image_path8 = "everfilter/8.jpg"
 style_reference_image_path9 = "everfilter/9.jpg"
 style_reference_image_path10 = "everfilter/10.jpg"
 result_prefix = "multiple_style"
-iterations = 10000
+iterations = 1000
 
 # these are the weights of the different loss components
 total_variation_weight = 1
@@ -312,6 +293,8 @@ if K.image_data_format() == 'channels_first':
 else:
     x = np.random.uniform(0, 255, (1, img_nrows, img_ncols, 3)) - 128.
 
+
+list_loss = []
 for i in range(iterations):
     print('Start of iteration', i)
     start_time = time.time()
@@ -325,3 +308,9 @@ for i in range(iterations):
     end_time = time.time()
     print('Image saved as', fname)
     print('Iteration %d completed in %ds' % (i, end_time - start_time))
+    list_loss.append(min_val)
+
+with open('cost_trace.txt','w') as output:
+    read_data = output.write(list_loss)
+
+
