@@ -1,0 +1,23 @@
+import argparse
+
+def getParser():
+    parser = argparse.ArgumentParser(description='Neural Style Transfer')
+    parser.add_argument('base_image_path', metavar='base', type=str, help='Path to image to transform')
+    parser.add_argument('style_image_paths', metavar='ref', nargs='+', type=str, help='Path to the reference images')
+    parser.add_argument('result_prefix', metavar='res_prefix', type=str, help='Prefix for the output')
+    parser.add_argument('--style_masks', type=str, default=None, nargs='+', help='Masks for style images')
+    parser.add_argument('--color_mask', type=str, default=None, help='Mask for color preservation')
+    parser.add_argument('--image_size', dest="img_size", default=400, type=int, help="Minimum image size")
+    parser.add_argument('--content_weight', dest='content_weight', default=0.025, type=float, help="Weight of content")
+    parser.add_argument('--style_weight', dest="style_weight", nargs='+', default=[1], type=float, help="Weight of style, can be multiple for multiple styles")
+    parser.add_argument('--total_variation_weight', dest='tv_weight', default=8.5e-5, type=float, help="Total Variation weight")
+    parser.add_argument('--num_iter', dest="num_iter", default=10, type=int, help="Number of iterations")
+    parser.add_argument('--model', default="vgg19", type=str, help="Choices are 'vgg16' and 'vgg19'")
+    parser.add_argument('--content_loss_type', default=0, type=int, help='Can be one of 0, 1, or 2. See Readme')
+    parser.add_argument('--rescale_method', dest='rescale_method', default='bilinear', type=str, help='Rescale image algorithm')
+    parser.add_argument('--maintain_aspect_ratio', dest='maintain_aspect_ratio', default="True", type=str, help="Maintain aspect ratio of loaded images")
+    parser.add_argument('--content_layer', dest="content_layer", default="conv4_2", type=str, help="Content layer used for content loss.")
+    parser.add_argument('--init_image', dest='init_image', default='noise', type=str, help="Initial image used to generate the final image. Options are 'content', 'noise', or 'gray'")
+    parser.add_argument('--pool_type', dest='pool', default='max', type=str, help="Pooling type. Can be 'ave' for average pooling or 'max' for max pooling")
+    parser.add_argument('--preserve_color', dest='color', default='False', type=str, help="Preserve original color in image")
+    parser.add_argument('--min_improvement', default=0.0, type=float, help='Defines minimum improvment required to continue script')
