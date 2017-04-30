@@ -29,6 +29,8 @@
     <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
 
+    <!-- font -->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -78,7 +80,10 @@
                         </div>
                     </center>
                     <p class="section-paragraph">
-                        Since the definition of style and content of an image can lead to confusion as we don't have definitive definitions for what contributes to a style or a content in an image, we then follow these two definitions according to <cite>Image style transfer using convolutional neural networks</cite>.
+                        Since the definition of style and content of an image can be misleading as we don't have definitive definitions for what contributes to a style or a content in an image, we then follow these two definitions according to <cite>Image style transfer using convolutional neural networks</cite>.
+                        We define a few notations here: $\vec{p}$ represent a content image, $\vec{s}$ represent a style image, and
+                        $\vec{x}$ represent an input image. Recall that the algorithm involves representing an image using the convolutional neural networks. To generalize, we define the set of 
+                        layers from the network for a content image and a style image as $\mathcal{C}$ and $\mathcal{S}$ respectively.
                     </p>
                     <p class="section-paragraph">
                         <b>Definition 1:</b> Two images have similar content if their high-level features by the trained classifier have small Euclidean distance. In other words, the loss function regarding content representation of two images is
@@ -88,26 +93,41 @@
                         where $X_{ij}^l$ and $P_{ij}^{l}$ are the generated feature representations in layer $l$ of $i^\text{th}$ filter at position $j$ of the constructed image and a content image respectively. The term $U_l$ is the total number of units on layer $l$.
                     </p>
                     <p class="section-paragraph">
-                        <b>Definition 2:</b> Two images have similar style if the difference between the features' Gram matrices has a small Frobenius norm. Briefly, the Gram's matrix is defined as follows:
+                        <b>Definition 2:</b> Two images have similar style if the difference between the features' Gram matrices has a small Frobenius norm. The Gram's matrix, $G_\vec{x}^l$, of an image $\vec{x}$ on layer $l$ is defined as follows:
                         <center>
-                            $G_{\vec{x},ij}^{l} = \sum\limits_{k}X^{l}_{ik}X_{jk}^l$
+                            $G_\vec{x}^l = \left[ G_{\vec{x},ij}^l \right]$
+                        </center>
+                        where each element of the Gram matrix is given by
+                        <center>
+                            $G_{\vec{x},ij}^{l} = \sum\limits_{k}X^{l}_{ik}X_{jk}^l$.
+                        </center>
+                        In the same way, we define the cost function representing the difference between two style images as follows:
+                        <center>
+                            $\mathcal{L}_\text{style}\left(\vec{s},\vec{x}\right) = \sum\limits_{l \in \mathcal{S}} \left[ \frac{1}{U_l} \sum\limits_{i,j}\left( G_{\vec{s},ij}^l - G_{\vec{x},ij}^l \right)^2 \right]$
                         </center>
                     </p>
-
-                    <center>
-                        $L_\text{content}(\vec{p},\vec{x},l) = \frac{1}{2}\sum_{i,j}\left(F_{ij}^l - P_{ij}^l\right)^2$
-                    </center>
-                    <h4>Content Reconstruction</h4>
+                    <h4>Algorithm</h4>
                     <p class="section-paragraph">
-                        Something here
+                        In <cite>Image style transfer using convolutional neural networks</cite>, a deep convolutional neural network (VGG-19) is used. The set of layers for representing a content is 
+                        $\mathcal{C} = \{\texttt{conv4_2}\}$. The set of layers for representing a style is $\mathcal{S} = \{\texttt{conv2_1}, \texttt{conv3_1}, \texttt{conv4_1}, \texttt{conv5_1}\}$. 
+                        More information on the structure of VGG network is available at <cite><a href="https://arxiv.org/pdf/1409.1556">Very Deep Convolutional Networks for Large-Scale Image Recognition</a></cite>.
+                        The main advantages of using the VGG network, compared to other convolutional neural network, are 1) able to run on a large scale image recognition settings, 2) generalizable with different 
+                        datasets, and 3) representable with deep networks. 
                     </p>
-                    <h4>Style Reconstruction</h4>
                     <p class="section-paragraph">
-                        Something here
+                        Note that the VGG network is the winner of the ImageNet Large-Scale Visual Recognition Challenge (ILSVRC-2012). The dataset ImageNet contains over 10 millions of images with various kind of objects
+                        We believe that the VGG network is a good candidate for encoding an image, as it's generalizable over many kinds of objects. The intuition for using a deep represenration of an image is that several layers in the convolutional neural networks
+                        retain photographically accurate information about the image, with different degrees of geometric and photometric invariance. 
                     </p>
-                    <h4>Style Transfer</h4>
                     <p class="section-paragraph">
-                        Something here
+                        The algorithm starts by extracting content and style features and storing to be used. The style image $\vec{s}$ is then passed through the VGG-19 network, and we computed its style representation $G_{\vec{s}}^{l}$ on all layers $l \in \mathcal{S}.$
+                        The content image $\vec{p}$ is passed through the VGG-19 network. Then, we obtained the content representation $P^{l}$ of all layers $l \in \mathcal{C}.$ Next, a random white noise image $\vec{x}$ is passed through the VGG-19 network. Its style features $G^{l}_{\vec{x}}$ and content features
+                        $X^l$ on all layers are compated. On each layer included in the style representation layers $\mathcal{S}$ or the content representation layer $\mathcal{C}$, we compute the content loss $\mathcal{L}_\text{content}(\vec{p},\vec{x})$ and/or style loss $\mathcal{L}_\text{style}(\vec{s},\vec{x})$ accordingly.
+                        We then used to optimize the total cost function that is defined by
+                        <center>
+                            $\mathcal{L}_\text{total}(\vec{p},\vec{s},\vec{x}) = \alpha \mathcal{L}_\text{content}(\vec{p},\vec{x}) + \beta \mathcal{L}_\text{style}(\vec{s},\vec{x})$
+                        </center>
+                        where $\alpha$ and $\beta$ are weighting factors for content and style reconstruction, respectively. The learning algorithm will then optimize $\vec{x}$ such that it minimizes $\mathcal{L}_\text{total}(\vec{p},\vec{s},\vec{x})$ using gradient descent, such as L-BFGS.
                     </p>
                 </div>
             </div>
@@ -120,23 +140,41 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="section-heading">Animated Style Learning [Proposal]</h1>
+                    <h1 class="section-heading">Animated Style Learning</h1>
+                    <p class="lead section-lead">Background</p>
                     <p class="section-paragraph">
-                        In this project, we aimed to produce a deep learning algorithm in the similar manner that can work on different type of images. Specifically, we aimed to create an algorithm that can convert images in the similar manner as the one shown below.
+                        In this final project, we aim to construct an algorithm that construct a style image 
                     </p>
                     <center>
-                        <img src="img/example1_original.jpeg" width="30%">
-                        <img src="img/example1_filtered.jpeg" width="30%"><br> Figure 1 & 2: Comparison between the original version and the expected version that the network will learn
+                        <img src="img/example1_original.jpeg" width="42.5%">
+                        <img src="img/example1_filtered.jpeg" width="42.5%"><br> Figure 2 & 3: Comparison between the original version and the expected version that the network will learn
                     </center>
                     <p class="section-paragraph">
                         From inspection, we can see that the content of images remains almost the same; however, the background content changes siginificantly. This suggests that the system we are trying to create has to be able to separate the background and the content. There
                         are 3 main papers in the fields that are seemingly strongly related to this issue:
-                        <ol>
-                            <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution</li>
-                            <li>A Neural Algorithm of Artistic Style</li>
-                            <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution</li>
-                        </ol>
                     </p>
+                    <p class="lead section-lead">Approach</p>
+                    <p class="section-paragraph">
+                    In this section, we describe the approach we used to answer our problem of finding a style image. Recall that the neural algorithm of style transfer \cite{gatys2016image} starts from a white noise for the generated image. 
+                    We propose to do in the similar manner by initializing the style image from white noise, and we will keep updating the style image by using back propagation to minimize the objective function. In our proposed approach, 
+                    we will use the same objective function as \cite{gatys2016image}; however, we'll ignore the content loss. 
+                    </p>
+                    <p class="section-paragraph">
+                    We first generated an image dataset of EverFilter transformed images. First, we make two assumptions, first, that the EverFilter transformed images are created by similar algorithm as the neural algorithm for the style transfer and, 
+                    second, that the style image used to create these transformed images is the same.
+                    </p>
+                    <p class="section-paragraph">
+                        According to <cite>Image style transfer using convolutional neural networks</cite>'s definition of style similarity, two images have similar style if and only if the difference between the features' Gram matrices has a small Frobenius norm. 
+                        We proposed the structure of algorithm as shown in Figure 4.
+                    </p>
+                    <center>
+                        <img src="img/proposed_algorithm.png" width=85%><br>
+                        <div style="text-align:left;">
+                        Figure 4: The structure of our proposed algorithm. At every iteration, we randomize an image from the dataset, then input to the VGG-19 pre-trained network. 
+                        We then calculate the Gram's matrix, F1, from the result of pre-trained network. To create a style image, we input to same VGG-19 pre-trained network in order to compute the Gram's matrix, F2, 
+                        in the similar manner. We then update the style image using the back-propagation method to minimize the Frobenius norm between F1 and F2.
+                        </div>
+                    </center>
                 </div>
             </div>
             <!-- /.row -->
