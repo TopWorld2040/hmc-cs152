@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,165 +24,168 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
     </script>
-    <script type="text/javascript" async
-      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
 
-  </head>
+</head>
 
-  <body>
+<body>
     <!-- Full Width Image Header with Logo -->
     <!-- Image backgrounds are set within the full-width-pics.css file. -->
     <header class="image-bg-fluid-height">
-      <!-- <img class="img-responsive img-center" src="http://placehold.it/200x200&text=Logo" alt="">-->
+        <!-- <img class="img-responsive img-center" src="http://placehold.it/200x200&text=Logo" alt="">-->
     </header>
 
     <!-- Content Section -->
     <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="section-heading">CS152 - Neural Network Final Project</h1>
-            <h1 class="section-heading">Introduction</h1>
-            <p class="lead section-lead">Image style learning</p>
-            <p class="section-paragraph">
-              This work is inspired by the work from <i><a href="https://arxiv.org/pdf/1508.06576.pdf">A Neural Algorithm of Artistic Style</a></i>. 
-              In this final project, we will reproduce the work produced in <i>A Neural Algorithm of Artistic Style</i> and
-              and adapt to other kind of images to see the potential of this algorithm.
-            </p>
-            <p class="section-paragraph">  
-              In <i>A Neural Algorithm of Artistic Style</i>, the authors only applied the algorithm on fine art images. We aim to apply the same 
-              algorithm proposed here to other kind of images such as photographs and, if times permit, frames in cinematography.
-            </p>
-            <p class="section-paragraph">
-              The outline of this blog will follows topics in the following order:
-              <ol>
-                <li>Reproduction of <i>A Neural Algorithm of Artistic Style</i></li>
-                <li>Apply on other kinds of images</li>
-                <li>Future Works</li>
-              </ol>
-            </p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="section-heading">CS152 - Neural Network Final Project</h1>
+                    <h1 class="section-heading">Introduction</h1>
+                    <p class="lead section-lead">Image Style Learning</p>
+                    <p class="section-paragraph">
+                        For the final project, I'm interested in an application of neural network on computer vision. <cite>Image style transfer using convolutional neural networks</cite> proposes a neural algorithm for combining a content image and a
+                        style image. The idea of this paper involves using an image representation derived from a convolutional neural network, as originated by <cite>
+                Understanding deep image representations by inverting them</cite>. Using the similar idea of representing with a convolutional neural network, I'm interested in answer a question if we can create a neural algorithm for learning the transformation
+                        between a content image and its transformed image. In other words, the scope of this final project is to focus mainly on generating a style image, given a content image and/or its transformed image. The outline of this webpage
+                        will start by an introduction of previous works, an image representation, our proposed method, and we'll finish with the discussion, results, and future works.
+                    </p>
+                </div>
+            </div>
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
+        <!-- /.container -->
     </section>
 
     <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="section-heading">Reproduction of the paper</h1>
-            <p class="section-paragraph">
-              In paper <i>A Neural Algorithm of Artistic Style</i>, the authors created a Deep Neural Network
-              that is able to create artistic high perceptual quality image. The deep network system separates
-              and then recombine content and style of any arbitrary images. In order to separate a content of an image,
-              <font color="red">they do something</font>. The process of image reconstruction is discussed below 
-              in details. Here, we note that the process of image reconstruction for the style and the content 
-              <font color="red">might be different</font>.
-            </p>
-            <h4>Image Representation</h4>
-            <p class="section-paragraph">
-              something here
-              </p>
-              <center>
-              $L_\text{content}(\vec{p},\vec{x},l) = \frac{1}{2}\sum_{i,j}\left(F_{ij}^l - P_{ij}^l\right)^2$
-              </center>
-            <h4>Content Reconstruction</h4>
-            <p class="section-paragraph">
-              Something here
-            </p>
-            <h4>Style Reconstruction</h4>
-            <p class="section-paragraph">
-              Something here
-            </p>
-            <h4>Style Transfer</h4>
-            <p class="section-paragraph">
-              Something here
-            </p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="section-heading">Previous Works</h1>
+                    <p class="lead section-lead"><cite>Image style transfer using convolutional neural networks</cite></p>
+                    <p class="section-paragraph">
+                        In transfering a style image to a content image problem, the goal is to synthesize a new image which contains a semantic content information of the content image and a style information of the reference style image. For example, one might be interested
+                        in combining a content image depicting the Neckarfront in Tübinger, Germany, with <i>The Shipwreck of the Minotaur</i> by J.M.W. Turner, 1805. Figure 1 below shows such example.
+                    </p>
+                    <center>
+                        <img src="img/example_style_transfer.png" width="85%"><br>
+                        <div style="text-align:left;">
+                            Figure 1: an example of result by a neural algorithm described in <cite>Image style transfer using convolutional neural networks</cite>. Left: a content image depicting the Neckarfront in Tuübinger, Germany; Right: a transformed
+                            image generated by the algorithm; Bottom: the paining named <i>The Shipwreck of the Minotaur</i> by J.M.W. Turner, 1805. This example is taken from <cite>Image style transfer using convolutional neural networks</cite>.
+                        </div>
+                    </center>
+                    <p class="section-paragraph">
+                        Since the definition of style and content of an image can lead to confusion as we don't have definitive definitions for what contributes to a style or a content in an image, we then follow these two definitions according to <cite>Image style transfer using convolutional neural networks</cite>.
+                    </p>
+                    <p class="section-paragraph">
+                        <b>Definition 1:</b> Two images have similar content if their high-level features by the trained classifier have small Euclidean distance. In other words, the loss function regarding content representation of two images is
+                        <center>
+                            $\mathcal{L}_\text{content}(\vec{p},\vec{x}) = \sum\limits_{l\in\mathcal{C}} \left[ \frac{1}{U_l} \sum\limits_{i,j} \left(P_{ij}^{l} - X_{ij}^{l}\right)^2 \right]$
+                        </center>
+                        where $X_{ij}^l$ and $P_{ij}^{l}$ are the generated feature representations in layer $l$ of $i^\text{th}$ filter at position $j$ of the constructed image and a content image respectively. The term $U_l$ is the total number of units on layer $l$.
+                    </p>
+                    <p class="section-paragraph">
+                        <b>Definition 2:</b> Two images have similar style if the difference between the features' Gram matrices has a small Frobenius norm. Briefly, the Gram's matrix is defined as follows:
+                        <center>
+                            $G_{\vec{x},ij}^{l} = \sum\limits_{k}X^{l}_{ik}X_{jk}^l$
+                        </center>
+                    </p>
+
+                    <center>
+                        $L_\text{content}(\vec{p},\vec{x},l) = \frac{1}{2}\sum_{i,j}\left(F_{ij}^l - P_{ij}^l\right)^2$
+                    </center>
+                    <h4>Content Reconstruction</h4>
+                    <p class="section-paragraph">
+                        Something here
+                    </p>
+                    <h4>Style Reconstruction</h4>
+                    <p class="section-paragraph">
+                        Something here
+                    </p>
+                    <h4>Style Transfer</h4>
+                    <p class="section-paragraph">
+                        Something here
+                    </p>
+                </div>
+            </div>
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
+        <!-- /.container -->
     </section>
 
     <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="section-heading">Animated Style Learning [Proposal]</h1>
-            <p class="section-paragraph">
-              In this project, we aimed to produce a deep learning algorithm in the similar manner that can work on different type of images. 
-              Specifically, we aimed to create an algorithm that can convert images in the similar manner as the one shown below.
-            </p>
-            <center>
-              <img src="img/example1_original.jpeg" width="30%">
-              <img src="img/example1_filtered.jpeg" width="30%"><br>
-              Figure 1 & 2: Comparison between the original version and the expected version that the network will learn
-            </center>
-            <p class="section-paragraph">
-              From inspection, we can see that the content of images remains almost the same; however, the background content changes siginificantly. 
-              This suggests that the system we are trying to create has to be able to separate the background and the content. There are 3 main papers in 
-              the fields that are seemingly strongly related to this issue:
-              <ol>
-                <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution</li>
-                <li>A Neural Algorithm of Artistic Style</li>
-                <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution</li>
-              </ol>
-            </p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="section-heading">Animated Style Learning [Proposal]</h1>
+                    <p class="section-paragraph">
+                        In this project, we aimed to produce a deep learning algorithm in the similar manner that can work on different type of images. Specifically, we aimed to create an algorithm that can convert images in the similar manner as the one shown below.
+                    </p>
+                    <center>
+                        <img src="img/example1_original.jpeg" width="30%">
+                        <img src="img/example1_filtered.jpeg" width="30%"><br> Figure 1 & 2: Comparison between the original version and the expected version that the network will learn
+                    </center>
+                    <p class="section-paragraph">
+                        From inspection, we can see that the content of images remains almost the same; however, the background content changes siginificantly. This suggests that the system we are trying to create has to be able to separate the background and the content. There
+                        are 3 main papers in the fields that are seemingly strongly related to this issue:
+                        <ol>
+                            <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution</li>
+                            <li>A Neural Algorithm of Artistic Style</li>
+                            <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution</li>
+                        </ol>
+                    </p>
+                </div>
+            </div>
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
+        <!-- /.container -->
     </section>
 
     <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="section-heading">Future Works</h1>
-            <p class="section-paragraph">
-            </p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="section-heading">Future Works</h1>
+                    <p class="section-paragraph">
+                    </p>
+                </div>
+            </div>
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
+        <!-- /.container -->
     </section>
 
 
-   <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="section-heading">References</h1>
-            <ol>
-              <li>Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. "A neural algorithm of artistic style." arXiv preprint arXiv:1508.06576 (2015).</li>
-              <li>Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. "Image style transfer using convolutional neural networks." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.</li>
-            </ol>
-          </div>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="section-heading">References</h1>
+                    <ol>
+                        <li>Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. "A neural algorithm of artistic style." arXiv preprint arXiv:1508.06576 (2015).</li>
+                        <li>Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. "Image style transfer using convolutional neural networks." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
+        <!-- /.container -->
     </section>
 
     <!-- Footer -->
     <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <p>Copyright &copy; Teerapat Jenrungrot 2017</p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Teerapat Jenrungrot 2017</p>
+                </div>
+            </div>
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
+        <!-- /.container -->
     </footer>
 
     <!-- jQuery -->
@@ -191,6 +194,6 @@
     <!-- Bootstrap Core JavaScript> -->
     <script src="js/bootstrap.min.js"></script>
 
-  </body>
+</body>
 
-  </html>
+</html>
