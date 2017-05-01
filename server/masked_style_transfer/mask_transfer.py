@@ -508,7 +508,7 @@ for i in range(num_iter):
         img = original_color_transform(content, img, mask=color_mask)
     
     if not rescale_image:
-        img_ht = int(img_width, aspect_ratio)
+        img_ht = int(img_width * aspect_ratio)
         print("Rescaling Image to ({}, {})".format(img_width, img_ht))
         img = imresize(img, (img_width, img_ht), interp=args.rescale_method)
 
