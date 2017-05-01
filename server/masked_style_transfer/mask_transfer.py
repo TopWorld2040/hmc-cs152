@@ -7,7 +7,7 @@ import warnings
 
 from keras.models import Model
 from keras.layers import Input
-from keras.layers.convolutional import Convolution2D, AveragePooling2D, MaxPooling2D
+from keras.layers.convolutional import Conv2D, AveragePooling2D, MaxPooling2D
 import keras.backend.tensorflow_backend as K
 from keras.utils.data_utils import get_file
 from keras.utils.layer_utils import convert_all_kernels_in_model
@@ -220,7 +220,7 @@ else:
 image_tensor = [base_image]
 for style_image_tensor in style_reference_images:
     image_tensor.append(style_image_tensor)
-image_tensors.append(combination_image)
+image_tensor.append(combination_image)
 
 nb_tensors = len(image_tensor)
 nb_style_images = nb_tensors - 2 # Content andoutput image not considered
@@ -236,33 +236,33 @@ else:
 ip = Input(tensor=input_tensor, shape=shape)
 
 # build a network
-x = Convolution2D(64, 3, 3, activation='relu', name='conv1_1', border_mode='same')(ip)
-x = Convolution2D(64, 3, 3, activation='relu', name='conv1_2', border_mode='same')(x)
+x = Conv2D(64, (3, 3), activation='relu', name='conv1_1', padding='same')(ip)
+x = Conv2D(64, (3, 3), activation='relu', name='conv1_2', padding='same')(x)
 x = pooling_func(x)
 
-x = Convolution2D(128, 3, 3, activation='relu', name='conv2_1', border_mode='same')(x)
-x = Convolution2D(128, 3, 3, activation='relu', name='conv2_2', border_mode='same')(x)
+x = Conv2D(128, (3, 3), activation='relu', name='conv2_1', padding='same')(x)
+x = Conv2D(128, (3, 3), activation='relu', name='conv2_2', padding='same')(x)
 x = pooling_func(x)
 
-x = Convolution2D(256, 3, 3, activation='relu', name='conv3_1', border_mode='same')(x)
-x = Convolution2D(256, 3, 3, activation='relu', name='conv3_2', border_mode='same')(x)
-x = Convolution2D(256, 3, 3, activation='relu', name='conv3_3', border_mode='same')(x)
+x = Conv2D(256, (3, 3), activation='relu', name='conv3_1', padding='same')(x)
+x = Conv2D(256, (3, 3), activation='relu', name='conv3_2', padding='same')(x)
+x = Conv2D(256, (3, 3), activation='relu', name='conv3_3', padding='same')(x)
 if args.model == 'vgg19':
-    x = Convolution2D(256, 3, 3, activation='relu', name='conv3_4', border_mode="same")(x)
+    x = Conv2D(256, (3, 3), activation='relu', name='conv3_4', padding="same")(x)
 x = pooling_func(x)
 
-x = Convolution2D(512, 3, 3, activation='relu', name='conv4_1', border_mode='same')(x)
-x = Convolution2D(512, 3, 3, activation='relu', name='conv4_2', border_mode='same')(x)
-x = Convolution2D(512, 3, 3, activation='relu', name='conv4_3', border_mode='same')(x)
+x = Conv2D(512, (3, 3), activation='relu', name='conv4_1', padding='same')(x)
+x = Conv2D(512, (3, 3), activation='relu', name='conv4_2', padding='same')(x)
+x = Conv2D(512, (3, 3), activation='relu', name='conv4_3', padding='same')(x)
 if args.model == 'vgg19':
-    x = Convolution2D(512, 3, 3, activation='relu', name='conv4_4', border_mode="same")(x)
+    x = Conv2D(512, (3, 3), activation='relu', name='conv4_4', padding="same")(x)
 x = pooling_func(x)
 
-x = Convolution2D(512, 3, 3, activation='relu', name='conv5_1', border_mode='same')(x)
-x = Convolution2D(512, 3, 3, activation='relu', name='conv5_2', border_mode='same')(x)
-x = Convolution2D(512, 3, 3, activation='relu', name='conv5_3', border_mode='same')(x)
+x = Conv2D(512, (3, 3), activation='relu', name='conv5_1', padding='same')(x)
+x = Conv2D(512, (3, 3), activation='relu', name='conv5_2', padding='same')(x)
+x = Conv2D(512, (3, 3), activation='relu', name='conv5_3', padding='same')(x)
 if args.model == 'vgg19':
-    x = Convolution2D(512, 3, 3, activation='relu', name='conv5_4', border_mode="same")(x)
+    x = Conv2D(512, (3, 3), activation='relu', name='conv5_4', padding="same")(x)
 x = pooling_func(x)
 
 model = Model(ip, x)
@@ -282,7 +282,7 @@ else:
 model.load_weights(weights)
 
 # Convert kernels to tensorflow
-if K.backend() == 'tensorflow' and K.image_dim_ordering() == 'th':
+if K.image_dim_ordering() == 'th':
     warnings.warn('You are using the TensorFlow backend, yet you are using Theano ordering')
     convert_all_kernels_in_model(model)
 
@@ -302,7 +302,7 @@ def gram_matrix(x):
     if K.image_dim_ordering() == 'th':
         features = K.batch_flatten(x)
     else:
-        features = K.batch_flattern(K.permute_dimensions(x, (2, 0, 1)))
+        features = K.batch_flatten(K.permute_dimensions(x, (2, 0, 1)))
     gram = K.dot(features - 1, K.transpose(features - 1))
     return gram
 
@@ -329,14 +329,14 @@ def style_loss(style, combination, mask_path=None, nb_channels=None):
 
 # an auxiliary loss function designed to main the 'content' of the base image in the generated image
 def content_loss(base, combination):
-    channel_dim = 0 if K.iamge_dim_ordering() == 'th' else -1
+    channel_dim = 0 if K.image_dim_ordering() == 'th' else -1
 
     channels = K.shape(base)[channel_dim]
     size = img_width * img_height
 
     if args.content_loss_type == 1:
         multiplier = 1 / (2.0 * (channels ** 0.5) * (size ** 0.5))
-    elif args.content_loss_tpye == 2:
+    elif args.content_loss_type == 2:
         multiplier = 1 / (channels * size)
     else:
         multiplier = 1.0
@@ -364,7 +364,7 @@ else:
 
 # combine these loss functions into a single scalar
 loss = K.variable(0.)
-layer_features = output_dict[args.content_layer]
+layer_features = output_dicts[args.content_layer]
 base_image_features = layer_features[0, :, :, :]
 combination_features = layer_features[nb_tensors - 1, :, :, :]
 loss += content_weight * content_loss(base_image_features, combination_features)
@@ -385,7 +385,7 @@ channel_index = 1 if K.image_dim_ordering() == 'th' else -1
 # Chained Inference without blurring
 for i in range(len(feature_layers) - 1):
     layer_features = output_dicts[feature_layers[i]]
-    shape = shape_dict[feature_layers[i]]
+    shape = shape_dicts[feature_layers[i]]
     combination_features = layer_features[nb_tensors - 1, :, :, :]
     style_reference_features = layer_features[1:nb_tensors - 1, :, :, :]
     sl1 = []
@@ -443,7 +443,7 @@ class Evaluator(object):
         assert self.loss_value is None
         loss_value, grad_values = eval_loss_and_grads(x)
         self.loss_value = loss_value
-        self.grads_values = grads_values
+        self.grads_values = grad_values
         return self.loss_value
 
     def grads(self, x):
@@ -451,7 +451,7 @@ class Evaluator(object):
         grad_values = np.copy(self.grads_values)
         self.loss_value = None
         self.grads_values = None
-        return self.grads_values
+        return grad_values
 
 evaluator = Evaluator()
 
@@ -488,7 +488,7 @@ prev_min_val = -1
 improvement_threshold = float(args.min_improvement)
 
 for i in range(num_iter):
-    print("Starting iteration %d of %d".format(i+1, num_iter))
+    print("Starting iteration {} of {}".format(i+1, num_iter))
     start_time = time.time()
 
     x, min_val, info = fmin_l_bfgs_b(evaluator.loss, x.flatten(), fprime=evaluator.grads, maxfun=20)
@@ -509,14 +509,14 @@ for i in range(num_iter):
     
     if not rescale_image:
         img_ht = int(img_width, aspect_ratio)
-        print("Rescaling Image to (%d, %d)".format(img_width, img_ht))
+        print("Rescaling Image to ({}, {})".format(img_width, img_ht))
         img = imresize(img, (img_width, img_ht), interp=args.rescale_method)
 
     if rescale_image:
-        print("Rescaling Image to (%d, %d)".format(img_WIDTH, img_HEIGHT))
+        print("Rescaling Image to ({}, {})".format(img_WIDTH, img_HEIGHT))
         img = imresize(img, (img_WIDTH, img_HEIGHT), interp=args.rescale_method)
 
-    fname = result_prefix + "_at_iteration_%d.png".format(i + 1)
+    fname = result_prefix + "_at_iteration_{}.png".format(i + 1)
 
     imsave(fname, img)
 
