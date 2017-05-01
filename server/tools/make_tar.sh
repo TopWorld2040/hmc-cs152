@@ -6,6 +6,6 @@ read filename
 echo -n "Please write the prefix for the file to be zipped (optional): "
 read prefix
 
-tar -cvf $filename "${prefix}*.png"
-rm "${prefix}*.png"
+tar -cvf $filename ${prefix}*.png
+rm ${prefix}*.png
 echo "tar successfully filename is " >> $filename
