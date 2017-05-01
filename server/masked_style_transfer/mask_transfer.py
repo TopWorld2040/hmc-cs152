@@ -497,7 +497,7 @@ for i in range(num_iter):
 
     with open('cost_trace.txt','w') as output_cost_trace:
         for each in list_loss:
-            output_cost_trace.write(str(each) + '\n')
+            output_cost_trace.write(str(format(each, '.20f')) + '\n')
 
     if prev_min_val == -1:
         prev_min_val = min_val
