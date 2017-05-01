@@ -486,12 +486,18 @@ num_iter = args.num_iter
 prev_min_val = -1
 
 improvement_threshold = float(args.min_improvement)
+list_loss = []
 
 for i in range(num_iter):
     print("Starting iteration {} of {}".format(i+1, num_iter))
     start_time = time.time()
 
     x, min_val, info = fmin_l_bfgs_b(evaluator.loss, x.flatten(), fprime=evaluator.grads, maxfun=20)
+    list_loss.append(min_val)
+
+    with open('cost_trace.txt','w') as output_cost_trace:
+        for each in list_loss:
+            output_cost_trace.write(str(each))
 
     if prev_min_val == -1:
         prev_min_val = min_val
