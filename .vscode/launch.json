@@ -9,7 +9,7 @@
             "stopOnEntry": true,
             "pythonPath": "${config:python.pythonPath}",
             "program": "${file}",
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/server/masked_style_transfer",
             "env": {},
             "envFile": "${workspaceRoot}/.env",
             "debugOptions": [
@@ -17,7 +17,10 @@
                 "WaitOnNormalExit",
                 "RedirectOutput"
             ],
-            "args": []
+            "args": ["--num_iter", "10", 
+                     "Tuebingen_Neckarfront.jpg", 
+                     "stary_night.jpg",
+                     "sample"]
         },
         {
             "name": "PySpark",

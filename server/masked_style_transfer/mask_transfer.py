@@ -53,7 +53,7 @@ style_image_paths = []
 for style_image_path in style_reference_image_paths:
     style_image_paths.append(style_image_path)
 
-style_maks_present = args.style_masks is not None
+style_mask_present = args.style_masks is not None
 mask_paths = []
 if style_mask_present:
     for mask_path in args.style_masks:
@@ -66,7 +66,7 @@ maintain_aspect_ratio   = str_to_bool(args.maintain_aspect_ratio)
 preserve_color          = str_to_bool(args.color)
 
 content_weight          = args.content_weight
-total_variation_weight  = args.total_variation_weight
+total_variation_weight  = args.tv_weight
 style_weights           = []
 for style_weight in args.style_weight:
     style_weights.append(style_weight)
@@ -152,8 +152,7 @@ def deprocess_image(x):
 
 # util function to preserve an image color
 def original_color_transform(content, generated, mask=None):
-    
-    generated = fromimage(toimage(generated, mde="RGB"), mode="YCbCr")
+    generated = fromimage(toimage(generated, mode="RGB"), mode="YCbCr")
 
     if mask is None:
         generated[:, :, 1:] = content[:, :, 1:] # Generated CbCr =  Content CbCr
