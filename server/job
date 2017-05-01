@@ -1,8 +1,10 @@
 #!/bin/bash
-#SBATCH -N 1
-#SBATCH -p GPU-shared
-#SBATCH --ntasks-per-node 2
+#SBATCH --job-name="neuralnet-hmc-cs152"
+#SBATCH --nodes=1
+#SBATCH --partition=GPU-shared
+#SBATCH --ntasks-per-node 1
 #SBATCH --gres=gpu:p100:1
+#SBARCH --export=ALL
 #SBATCH -t 10:00:00
 
 module load anaconda/4.2.0-3.5.2
