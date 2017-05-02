@@ -26,11 +26,14 @@
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
     </script>
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
+    <script type="text/javascript" async src="js/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    <!-- github button -->
+    <script async defer src="js/github-buttons/buttons.js"></script>
 
     <!-- font -->
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link href='css/Source-Sans-Pro.css' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -43,6 +46,15 @@
     <!-- Content Section -->
     <section>
         <div class="container">
+            <div class="row">
+                <div class="col-lg-10"></div>
+                <div class="col-lg-1">
+                    <a class="github-button" href="https://github.com/mjenrungrot/hmc-cs152/fork" data-icon="octicon-repo-forked" data-style="mega" aria-label="Fork mjenrungrot/hmc-cs152 on GitHub">Fork</a>
+                </div>
+                <div class="col-lg-1">
+                    <a class="github-button" href="https://github.com/mjenrungrot/hmc-cs152/archive/master.zip" data-icon="octicon-cloud-download" data-style="mega" aria-label="Download mjenrungrot/hmc-cs152 on GitHub">Download</a>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="section-heading">CS152 - Neural Network Final Project</h1>
@@ -87,22 +99,22 @@
                     </p>
                     <p class="section-paragraph">
                         <b>Definition 1:</b> Two images have similar content if their high-level features by the trained classifier have small Euclidean distance. In other words, the loss function regarding content representation of two images is
-                        <center>
+                        <center class="math-equation-center">
                             $\mathcal{L}_\text{content}(\vec{p},\vec{x}) = \sum\limits_{l\in\mathcal{C}} \left[ \frac{1}{U_l} \sum\limits_{i,j} \left(P_{ij}^{l} - X_{ij}^{l}\right)^2 \right]$
                         </center>
                         where $X_{ij}^l$ and $P_{ij}^{l}$ are the generated feature representations in layer $l$ of $i^\text{th}$ filter at position $j$ of the constructed image and a content image respectively. The term $U_l$ is the total number of units on layer $l$.
                     </p>
                     <p class="section-paragraph">
                         <b>Definition 2:</b> Two images have similar style if the difference between the features' Gram matrices has a small Frobenius norm. The Gram's matrix, $G_\vec{x}^l$, of an image $\vec{x}$ on layer $l$ is defined as follows:
-                        <center>
+                        <center class="math-equation-center">
                             $G_\vec{x}^l = \left[ G_{\vec{x},ij}^l \right]$
                         </center>
                         where each element of the Gram matrix is given by
-                        <center>
+                        <center class="math-equation-center">
                             $G_{\vec{x},ij}^{l} = \sum\limits_{k}X^{l}_{ik}X_{jk}^l$.
                         </center>
                         In the same way, we define the cost function representing the difference between two style images as follows:
-                        <center>
+                        <center class="math-equation-center">
                             $\mathcal{L}_\text{style}\left(\vec{s},\vec{x}\right) = \sum\limits_{l \in \mathcal{S}} \left[ \frac{1}{U_l} \sum\limits_{i,j}\left( G_{\vec{s},ij}^l - G_{\vec{x},ij}^l \right)^2 \right]$
                         </center>
                     </p>
@@ -124,7 +136,7 @@
                         The content image $\vec{p}$ is passed through the VGG-19 network. Then, we obtained the content representation $P^{l}$ of all layers $l \in \mathcal{C}.$ Next, a random white noise image $\vec{x}$ is passed through the VGG-19 network. Its style features $G^{l}_{\vec{x}}$ and content features
                         $X^l$ on all layers are compated. On each layer included in the style representation layers $\mathcal{S}$ or the content representation layer $\mathcal{C}$, we compute the content loss $\mathcal{L}_\text{content}(\vec{p},\vec{x})$ and/or style loss $\mathcal{L}_\text{style}(\vec{s},\vec{x})$ accordingly.
                         We then used to optimize the total cost function that is defined by
-                        <center>
+                        <center class="math-equation-center">
                             $\mathcal{L}_\text{total}(\vec{p},\vec{s},\vec{x}) = \alpha \mathcal{L}_\text{content}(\vec{p},\vec{x}) + \beta \mathcal{L}_\text{style}(\vec{s},\vec{x})$
                         </center>
                         where $\alpha$ and $\beta$ are weighting factors for content and style reconstruction, respectively. The learning algorithm will then optimize $\vec{x}$ such that it minimizes $\mathcal{L}_\text{total}(\vec{p},\vec{s},\vec{x})$ using gradient descent, such as L-BFGS.

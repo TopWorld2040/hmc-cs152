@@ -8,6 +8,14 @@
     /* font-size: 13pt; */
 }
 
+mjx-chtml, MathJax_CHTML {
+    !font-size: 100%;
+}
+
+.math-equation-center {
+    font-size: 160%;
+}
+
 .image-bg-fluid-height,
 .image-bg-fixed-height {
     text-align: center;
