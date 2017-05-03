@@ -189,11 +189,11 @@
                     project, we sampled the transformed images manually from online sites. The objective function of our approach becomes
                     </p>
                         <center class="math-equation-center">
-                            $\mathcal{L}(\texttt{dataset},\vec{x}) = \sum\limits_{\vec{s} \in \texttt{dataset}}\mathcal{L}_\text{style}(\vec{s},\vec{x})$
+                            $\mathcal{L}(\texttt{dataset},\vec{x}) = \sum\limits_{i=1; \vec{s} \in \texttt{dataset}}^{|\texttt{dataset}|}\alpha_{i}\mathcal{L}_\text{style}(\vec{s},\vec{x})$
                         </center>
                         <p class="section-paragraph">
                      
-                        where $\vec{s}$ and $\vec{x}$ is a style image vector and an input image vector. 
+                        where $\vec{s}$ and $\vec{x}$ is a style image vector and an input image vector, and $\alpha_i$ is a weighting parameter of each reference style image. 
                     </p>
                     <center>
                         <img src="img/proposed_algorithm.png" width=65%><br>
@@ -225,8 +225,9 @@
                     </p>
 
                     <p class="section-paragraph">
-                    First, we tested our approach with a dataset of size one. Figure 4 shows the reference transformed image.
-                    Here, we include the generated images at different iterations.
+                    First, we tested our approach with a dataset of size one. Figure 4, Figure 5, and Figure 6 show examples of output from our 
+                    proposed algorithm. The training process takes roughly about 30 seconds for each epoch, which yields approximately 13 hours 
+                    of running. Here, we include the generated images at different iterations.
                         <center>
                             <img src="img/everfilter/1.jpg", width="40%">
                             <img src="img/db1-everfilter1/everfilter1_at_iteration_15.png", width="40%"><br>
