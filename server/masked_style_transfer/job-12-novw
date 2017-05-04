@@ -11,5 +11,5 @@
 set -x
 set -u
 set -e
-python -i mask_transfer.py --total_variation_weight 0  --content_weight 0 --style_weight 1 --rescale_image True --num_iter 1500 --style_masks everfilter/mask/1.jpg Tuebingen_Neckarfront.jpg everfilter/1.jpg everfilter1-masked
+python -i mask_transfer.py --total_variation_weight 0  --content_weight 0 --style_weight 1 --rescale_image True --num_iter 1500 --style_masks everfilter/mask/12.jpg Tuebingen_Neckarfront.jpg everfilter/12.jpg everfilter12-masked-novw
 
