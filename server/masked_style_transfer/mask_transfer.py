@@ -1,3 +1,5 @@
+## The implementation is from https://github.com/titu1994/Neural-Style-Transfer.
+
 from scipy.misc import imread, imresize, imsave, fromimage, toimage
 from scipy.optimize import fmin_l_bfgs_b
 import numpy as np
