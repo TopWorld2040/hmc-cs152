@@ -487,12 +487,27 @@
       <div class="col-lg-12">
         <h1 class="section-heading">Conclusion</h1>
         <p class="section-paragraph">
-            Using the definition of style according to <cite>Image style transfer using convolutional neural networks</cite> by using
-            the Frobenius norm of difference between Gram matrices, we are able to see that the generated images will have similar color
-            composition. Considering a generated image, one can see that its foreground portion and its background portion are mixed together.
-            This stems from the definition of style we have. Then, we believe that this neural algorithm for style transfer can be improved if
-            we can perform an image segmentation between a foreground portion and a background portion. This can perhaps produce a correct
-            transformation between each portion of an image.
+          From our experiments, we have better understanding of what contributes to a style of an image.
+          Based on the definitions of style according to <cite>Image style transfer using convolutional
+          neural networks</cite> that involes the Frobenius norm of the difference between two Gram matrices,
+          style, as captured by Gram matrices, can be explained using a concept of probability distributions.
+          For example, we can generate an image of sky with similar style to Everfilter-styled images
+          by sampling from the distribution of Everfilter-styled sky images.
+        </p>
+        <p class="section-paragraph">
+          Using the concept of probability distributions, this finding has an important implication that
+          we can generate any image with similar style if we have a way to construct such distribution.
+          We believe that constructing a distribution of any image can be done with enough samples from that
+          distribution.
+        </p>
+        <p class="section-paragraph">
+          As depicted by Figures 5, 6, 7, and 9, our finding has shown that if we construct distributions
+          based on entire image, the generated images will be jumbled together. Instead, if we construct
+          distributions based on only specific portions of an image, as illustrated in Figure 11, the
+          generated image seems to more stylistically coherent and more visually interpretable.
+        </p>
+        <p class="section-paragraph">
+
         </p>
       </div>
     </div>
