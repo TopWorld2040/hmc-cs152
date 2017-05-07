@@ -1,5 +1,5 @@
-hmc-cs152
-=========
+Animated Style Learning
+=======================
 
 This repository is for a final project for CS 152 Neural Network, taught at Harvey Mudd College in Spring 2017.
 
