@@ -5,7 +5,11 @@
  */
 p {
     font-family: 'Source Sans Pro', sans-serif;
-    font-size: 14pt; 
+    font-size: 14pt;
+}
+
+.lead {
+    font-size: 22pt;
 }
 
 mjx-chtml, MathJax_CHTML {
